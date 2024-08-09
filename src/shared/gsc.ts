@@ -87,6 +87,7 @@ export async function getSites(accessToken: string) {
  */
 export async function checkSiteUrl(accessToken: string, siteUrl: string) {
   const sites = await getSites(accessToken);
+  console.debug("sites:", sites);
   let formattedUrls: string[] = [];
 
   // Convert the site URL into all possible formats
@@ -94,19 +95,24 @@ export async function checkSiteUrl(accessToken: string, siteUrl: string) {
     formattedUrls.push(siteUrl);
     formattedUrls.push(convertToHTTP(siteUrl.replace("https://", "")));
     formattedUrls.push(convertToSCDomain(siteUrl));
+    formattedUrls.push(convertToSCDomain(siteUrl.replace("www.", "")));
   } else if (siteUrl.startsWith("http://")) {
     formattedUrls.push(siteUrl);
     formattedUrls.push(convertToHTTPS(siteUrl.replace("http://", "")));
     formattedUrls.push(convertToSCDomain(siteUrl));
+    formattedUrls.push(convertToSCDomain(siteUrl.replace("www.", "")));
   } else if (siteUrl.startsWith("sc-domain:")) {
     formattedUrls.push(siteUrl);
     formattedUrls.push(convertToHTTP(siteUrl.replace("sc-domain:", "")));
     formattedUrls.push(convertToHTTPS(siteUrl.replace("sc-domain:", "")));
+    formattedUrls.push(convertToSCDomain(siteUrl.replace("www.", "")));
   } else {
     console.error("❌ Unknown site URL format.");
     console.error("");
     process.exit(1);
   }
+
+  console.debug("formatted urls:", formattedUrls);
 
   // Check if any of the formatted URLs are accessible
   for (const formattedUrl of formattedUrls) {

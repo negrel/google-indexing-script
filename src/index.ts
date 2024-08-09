@@ -67,6 +67,7 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
   let siteUrl = convertToSiteUrl(input);
   console.log(`🔎 Processing site: ${siteUrl}`);
   const cachePath = path.join(".cache", `${convertToFilePath(siteUrl)}.json`);
+  console.debug("access token", accessToken);
 
   if (!accessToken) {
     console.error("❌ Failed to get access token, check your service account credentials.");
@@ -74,7 +75,9 @@ export const index = async (input: string = process.argv[2], options: IndexOptio
     process.exit(1);
   }
 
+  console.debug("check site url...");
   siteUrl = await checkSiteUrl(accessToken, siteUrl);
+  console.debug("site url OK.");
 
   let pages = options.urls || [];
   if (pages.length === 0) {
