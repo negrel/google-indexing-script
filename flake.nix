@@ -13,7 +13,7 @@
       {
         devShells = {
           default = pkgs.mkShell {
-            buildInputs = with pkgs; [ nodejs_18 ];
+            buildInputs = with pkgs; [ nodejs_20 ];
           };
         };
         packages = {
